@@ -18,6 +18,10 @@ build: ## Build site with production settings and put deliverables in ./public
 build-preview: ## Build site with drafts and future posts enabled
 	hugo --buildDrafts --buildFuture
 
+build-linkcheck: ## Build site with config for linkchecking.
+	rm -r public
+	hugo --minify --config config.toml,linkcheck-config.toml
+
 deploy-preview: ## Deploy preview site via netlify
 	hugo --enableGitInfo --buildFuture -b $(DEPLOY_PRIME_URL)
 
@@ -28,6 +32,8 @@ check-headers-file:
 	scripts/check-headers-file.sh
 
 production-build: build check-headers-file ## Build the production site and ensure that noindex headers aren't added
+
+linkcheck-build: build-linkcheck check-headers-file ## Build the production site and ensure that noindex headers aren't added
 
 non-production-build: ## Build the non-production site, which adds noindex headers to prevent indexing
 	hugo --enableGitInfo
@@ -50,3 +56,11 @@ docker-serve:
 test-examples:
 	scripts/test_examples.sh install
 	scripts/test_examples.sh run
+
+link-checker-setup:
+	docker pull wjdp/htmltest
+
+run-link-checker:
+	docker run --mount type=bind,source=$(CURDIR),target=/test --rm wjdp/htmltest htmltest
+
+check-internal-links: build-linkcheck link-checker-setup run-link-checker

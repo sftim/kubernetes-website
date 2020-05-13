@@ -5,6 +5,8 @@ CNAME
 .travis.yml
 .idea/
 .vscode/
+tmp/
+bin/htmltest
 
 # Vim ignore
 # source: https://github.com/github/gitignore/blob/master/Global/Vim.gitignore
