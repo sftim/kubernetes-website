@@ -33,8 +33,6 @@ check-headers-file:
 
 production-build: build check-headers-file ## Build the production site and ensure that noindex headers aren't added
 
-linkcheck-build: build-linkcheck check-headers-file ## Build the production site and ensure that noindex headers aren't added
-
 non-production-build: ## Build the non-production site, which adds noindex headers to prevent indexing
 	hugo --enableGitInfo
 
@@ -63,4 +61,4 @@ link-checker-setup:
 run-link-checker:
 	docker run --mount type=bind,source=$(CURDIR),target=/test --rm wjdp/htmltest htmltest
 
-check-internal-links: build-linkcheck link-checker-setup run-link-checker
+check-internal-links: build-linkcheck link-checker-setup run-link-checker ##runs hugo with linkchecker config, pull the latest wjdp/htmltest image, then checks site links in a container
