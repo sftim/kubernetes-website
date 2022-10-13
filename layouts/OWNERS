@@ -1,0 +1,5 @@
+approvers:
+  - sig-docs-leads
+  # Also OK to add any future web development owners group
+labels:
+  - area/web-development

@@ -1,2 +1,7 @@
-# No owner overrides here
+# This directory contains only symbolic links
 # See data/i18n/*/OWNERS instead
+approvers:
+  - sig-docs-localization-owners
+labels:
+  - area/web-development
+  - area/localization

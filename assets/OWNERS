@@ -1,0 +1,12 @@
+filters:
+  ".*":
+    approvers:
+     - sig-docs-leads
+     # Also OK to add any future web development owners group
+  ".*\\.scss"
+    labels:
+      - area/web-development
+  ".*\\.css"
+    labels:
+      - area/web-development
+

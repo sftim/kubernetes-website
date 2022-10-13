@@ -1,0 +1,4 @@
+filters:
+  ".*\\.css"
+    labels:
+      - area/web-development
