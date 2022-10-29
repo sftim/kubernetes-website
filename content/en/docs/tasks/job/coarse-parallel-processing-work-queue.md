@@ -26,10 +26,15 @@ Here is an overview of the steps in this example:
 ## {{% heading "prerequisites" %}}
 
 
-Be familiar with the basic,
+You should already be familiar with the basic,
 non-parallel, use of [Job](/docs/concepts/workloads/controllers/job/).
 
 {{< include "task-tutorial-prereqs.md" >}}
+
+You will need a container image registry where you can upload images to run in your cluster.
+
+This task example also assumes that you have Docker installed locally.
+
 
 <!-- steps -->
 
@@ -43,20 +48,18 @@ cluster and reuse it for many jobs, as well as for long-running services.
 Start RabbitMQ as follows:
 
 ```shell
-kubectl create -f https://raw.githubusercontent.com/kubernetes/kubernetes/release-1.3/examples/celery-rabbitmq/rabbitmq-service.yaml
+kubectl create -f https://kubernetes.io/examples/application/job/rabbitmq-service.yaml
 ```
 ```
 service "rabbitmq-service" created
 ```
 
 ```shell
-kubectl create -f https://raw.githubusercontent.com/kubernetes/kubernetes/release-1.3/examples/celery-rabbitmq/rabbitmq-controller.yaml
+kubectl create -f https://kubernetes.io/examples/application/job/rabbitmq-statefulset.yaml
 ```
 ```
-replicationcontroller "rabbitmq-controller" created
+statefulset "rabbitmq" created
 ```
-
-We will only use the rabbitmq part from the [celery-rabbitmq example](https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq).
 
 ## Testing the message queue service
 
@@ -68,7 +71,7 @@ First create a temporary interactive Pod.
 
 ```shell
 # Create a temporary interactive container
-kubectl run -i --tty temp --image ubuntu:18.04
+kubectl run -i --tty temp --image ubuntu:22.04
 ```
 ```
 Waiting for pod default/temp-loe07 to be running, status is Pending, pod ready: false
@@ -77,21 +80,22 @@ Waiting for pod default/temp-loe07 to be running, status is Pending, pod ready: 
 
 Note that your pod name and command prompt will be different.
 
-Next install the `amqp-tools` so we can work with message queues.
+Next install the `amqp-tools` so you can work with message queues:
 
-```shell
-# Install some tools
+```
+# Install some tools (inside the Pod)
 root@temp-loe07:/# apt-get update
 .... [ lots of output ] ....
 root@temp-loe07:/# apt-get install -y curl ca-certificates amqp-tools python dnsutils
 .... [ lots of output ] ....
 ```
 
-Later, we will make a docker image that includes these packages.
+Later, you will make a container image that includes these packages.
 
-Next, we will check that we can discover the rabbitmq service:
+Next, you will check that you can discover the Service for RabbitMQ:
 
 ```
+# Run these commands inside the Pod
 # Note the rabbitmq-service has a DNS name, provided by Kubernetes:
 
 root@temp-loe07:/# nslookup rabbitmq-service
@@ -104,18 +108,21 @@ Address: 10.0.147.152
 # Your address will vary.
 ```
 
-If Kube-DNS is not set up correctly, the previous step may not work for you.
-You can also find the service IP in an env var:
+If the `kube-dns` addon is not set up correctly, the previous step may not work for you.
+You can also find the service IP in an environment variable
+
 
 ```
-# env | grep RABBIT | grep HOST
+# Install some tools (inside the Pod)
+root@temp-loe07:/# env | grep RABBIT | grep HOST
 RABBITMQ_SERVICE_SERVICE_HOST=10.0.147.152
 # Your address will vary.
 ```
 
-Next we will verify we can create a queue, and publish and consume messages.
+Next you will verify that can create a queue, and publish and consume messages.
 
-```shell
+```
+# Run these commands inside the Pod
 # In the next line, rabbitmq-service is the hostname where the rabbitmq-service
 # can be reached.  5672 is the standard port for rabbitmq.
 
@@ -144,9 +151,9 @@ In the last command, the `amqp-consume` tool takes one message (`-c 1`)
 from the queue, and passes that message to the standard input of an arbitrary command.  In this case, the program `cat` prints out the characters read from standard input, and the echo adds a carriage
 return so the example is readable.
 
-## Filling the Queue with tasks
+## Fill the queue with tasks
 
-Now let's fill the queue with some "tasks".  In our example, our tasks are strings to be
+Now, fill the queue with some simulated tasks.  In this example, the tasks are strings to be
 printed.
 
 In a practice, the content of the messages might be:
@@ -157,18 +164,22 @@ In a practice, the content of the messages might be:
 - configuration parameters to a simulation
 - frame numbers of a scene to be rendered
 
-In practice, if there is large data that is needed in a read-only mode by all pods
-of the Job, you will typically put that in a shared file system like NFS and mount
-that readonly on all the pods, or the program in the pod will natively read data from
-a cluster file system like HDFS.
+If there is large data that is needed in a read-only mode by all pods
+of the Job, you typically put that in a shared file system like NFS and mount
+that readonly on all the pods, or write the program in the pod so that it can natively read
+data from a cluster file system like HDFS.
 
-For our example, we will create the queue and fill it using the amqp command line tools.
-In practice, you might write a program to fill the queue using an amqp client library.
+For this example, you will create the queue and fill it using the AMQP command line tools.
+In practice, you might write a program to fill the queue using an AMQP client library.
 
 ```shell
+# Run this on your computer, not in the Pod
 /usr/bin/amqp-declare-queue --url=$BROKER_URL -q job1  -d
+```
+```
 job1
 ```
+Add items to the queue:
 ```shell
 for f in apple banana cherry date fig grape lemon melon
 do
@@ -176,14 +187,14 @@ do
 done
 ```
 
-So, we filled the queue with 8 messages.
+You added 8 messages to the queue
 
-## Create an Image
+## Create a container image
 
-Now we are ready to create an image that we will run as a job.
+Now you are ready to create an image that you will run as a Job.
 
-We will use the `amqp-consume` utility to read the message
-from the queue and run our actual program.  Here is a very simple
+The job will use the `amqp-consume` utility to read the message
+from the queue and run the actual work.  Here is a very simple
 example program:
 
 {{% code_sample language="python" file="application/job/rabbitmq/worker.py" %}}
@@ -194,9 +205,7 @@ Give the script execution permission:
 chmod +x worker.py
 ```
 
-Now, build an image.  If you are working in the source
-tree, then change directory to `examples/job/work-queue-1`.
-Otherwise, make a temporary directory, change to it,
+Now, build an image. Make a temporary directory, change to it,
 download the [Dockerfile](/examples/application/job/rabbitmq/Dockerfile),
 and [worker.py](/examples/application/job/rabbitmq/worker.py).  In either case,
 build the image with this command:
@@ -214,31 +223,24 @@ docker tag job-wq-1 <username>/job-wq-1
 docker push <username>/job-wq-1
 ```
 
-If you are using [Google Container
-Registry](https://cloud.google.com/tools/container-registry/), tag
-your app image with your project ID, and push to GCR. Replace
-`<project>` with your project ID.
-
-```shell
-docker tag job-wq-1 gcr.io/<project>/job-wq-1
-gcloud docker -- push gcr.io/<project>/job-wq-1
-```
+If you are using an alternative container image registry, tag the
+image and push it there instead.
 
 ## Defining a Job
 
-Here is a job definition.  You'll need to make a copy of the Job and edit the
-image to match the name you used, and call it `./job.yaml`.
-
+Here is a manifest for a Job.  You'll need to make a copy of the Job manifest
+(call it `./job.yaml`),
+and edit the name of the container image to match the name you used.
 
 {{% code_sample file="application/job/rabbitmq/job.yaml" %}}
 
 In this example, each pod works on one item from the queue and then exits.
 So, the completion count of the Job corresponds to the number of work items
-done.  So we set, `.spec.completions: 8` for the example, since we put 8 items in the queue.
+done. That is why the example manifest has `.spec.completions` set to `8`.
 
 ## Running the Job
 
-So, now run the Job:
+Now, run the Job:
 
 ```shell
 kubectl apply -f ./job.yaml
@@ -301,22 +303,24 @@ All the pods for that Job succeeded. Yay.
 
 ## Alternatives
 
-This approach has the advantage that you
-do not need to modify your "worker" program to be aware that there is a work queue.
+This approach has the advantage that you do not need to modify your "worker" program to be
+aware that there is a work queue. You can include the worker program unmodified in your container
+image.
 
-It does require that you run a message queue service.
+Using this approach does require that you run a message queue service.
 If running a queue service is inconvenient, you may
 want to consider one of the other [job patterns](/docs/concepts/workloads/controllers/job/#job-patterns).
 
 This approach creates a pod for every work item.  If your work items only take a few seconds,
 though, creating a Pod for every work item may add a lot of overhead.  Consider another
-[example](/docs/tasks/job/fine-parallel-processing-work-queue/), that executes multiple work items per Pod.
+design, such as in the [fine parallel work queue example](/docs/tasks/job/fine-parallel-processing-work-queue/),
+that executes multiple work items per Pod.
 
-In this example, we use the `amqp-consume` utility to read the message
-from the queue and run our actual program.  This has the advantage that you
+In this example, you used the `amqp-consume` utility to read the message
+from the queue and run the actual program.  This has the advantage that you
 do not need to modify your program to be aware of the queue.
-A [different example](/docs/tasks/job/fine-parallel-processing-work-queue/), shows how to
-communicate with the work queue using a client library.
+The [fine parallel work queue example](/docs/tasks/job/fine-parallel-processing-work-queue/)
+shows how to communicate with the work queue using a client library.
 
 ## Caveats
 
@@ -327,11 +331,11 @@ If the number of completions is set to more than the number of items in the queu
 then the Job will not appear to be completed, even though all items in the queue
 have been processed.  It will start additional pods which will block waiting
 for a message.
+You would need to make your own mechanism to spot when there is work
+to do and measure the size of the queue, setting the number of completions to match.
 
 There is an unlikely race with this pattern.  If the container is killed in between the time
-that the message is acknowledged by the amqp-consume command and the time that the container
+that the message is acknowledged by the `amqp-consume` command and the time that the container
 exits with success, or if the node crashes before the kubelet is able to post the success of the pod
-back to the api-server, then the Job will not appear to be complete, even though all items
+back to the API server, then the Job will not appear to be complete, even though all items
 in the queue have been processed.
-
-

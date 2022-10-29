@@ -7,7 +7,7 @@ weight: 30
 
 <!-- overview -->
 
-In this example, we will run a Kubernetes Job with multiple parallel
+In this example, you will run a Kubernetes Job with multiple parallel
 worker processes in a given pod.
 
 In this example, as each pod is created, it picks up one unit of work
@@ -15,9 +15,10 @@ from a task queue, processes it, and repeats until the end of the queue is reach
 
 Here is an overview of the steps in this example:
 
-1. **Start a storage service to hold the work queue.**  In this example, we use Redis to store
-   our work items.  In the previous example, we used RabbitMQ.  In this example, we use Redis and
-   a custom work-queue client library because AMQP does not provide a good way for clients to
+1. **Start a storage service to hold the work queue.**  In this example, you will use Redis to store
+   our work items.  In the [previous example](/docs/tasks/job/coarse-parallel-processing-work-queue),
+   you used RabbitMQ.  In this example, you will use Redis and a custom work-queue client library;
+   this is because AMQP does not provide a good way for clients to
    detect when a finite-length work queue is empty.  In practice you would set up a store such
    as Redis once and reuse it for the work queues of many jobs, and other things.
 1. **Create a queue, and fill it with messages.**  Each message represents one task to be done.  In
@@ -30,6 +31,10 @@ Here is an overview of the steps in this example:
 
 {{< include "task-tutorial-prereqs.md" >}}
 
+You will need a container image registry where you can upload images to run in your cluster.
+
+This task example also assumes that you have Docker installed locally.
+
 <!-- steps -->
 
 Be familiar with the basic,
@@ -39,7 +44,7 @@ non-parallel, use of [Job](/docs/concepts/workloads/controllers/job/).
 
 ## Starting Redis
 
-For this example, for simplicity, we will start a single instance of Redis.
+For this example, for simplicity, you will start a single instance of Redis.
 See the [Redis Example](https://github.com/kubernetes/examples/tree/master/guestbook) for an example
 of deploying Redis scalably and redundantly.
 
@@ -108,13 +113,13 @@ the first step of the above block to `redis-cli -h $REDIS_SERVICE_HOST`.
 
 ## Create an Image
 
-Now we are ready to create an image that we will run.
+Now you are ready to create an image that we will run.
 
-We will use a python worker program with a redis client to read
+You're going to use a Python worker program with a Redis client to read
 the messages from the message queue.
 
 A simple Redis work queue client library is provided,
-called rediswq.py ([Download](/examples/application/job/redis/rediswq.py)).
+called `rediswq.py` ([Download](/examples/application/job/redis/rediswq.py)).
 
 The "worker" program in each Pod of the Job uses the work queue
 client library to get work.  Here it is:
@@ -124,7 +129,7 @@ client library to get work.  Here it is:
 You could also download [`worker.py`](/examples/application/job/redis/worker.py),
 [`rediswq.py`](/examples/application/job/redis/rediswq.py), and
 [`Dockerfile`](/examples/application/job/redis/Dockerfile) files, then build
-the image:
+the container image. Here's an example using Docker to do the image build:
 
 ```shell
 docker build -t job-wq-2 .
