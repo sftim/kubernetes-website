@@ -1,0 +1,23 @@
+{{- $currentVersion := site.Params.version -}}
+{{- $currentVersion := (replace $currentVersion "v" "") -}}
+{{- $seenPatchVersionInfoCount := 0 -}}
+{{- range $releaseInfo := .Site.Data.releases.schedule.schedules -}}
+    {{- if eq $currentVersion ( printf "%.2f" $releaseInfo.release ) -}}
+        {{- range $patchReleaseInfo := $releaseInfo.previousPatches -}}
+            {{- if eq $seenPatchVersionInfoCount 0 -}}
+              {{- $currentPatchVersion := $patchReleaseInfo.release -}}
+            {{- end -}}
+            {{- $seenPatchVersionInfoCount = add $seenPatchVersionInfoCount 1 -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+{{- if gt $seenPatchVersionInfoCount 0 -}}
+    {{- $url := "https://dl.k8s.io/release/stable.txt" -}}
+    {{- $sep := "/" -}}
+    {{- range $rownumber, $row := getCSV $sep $url -}}
+        {{- if ne (index $row 0) $currentPatchVersion -}}
+           {{- warnf "Patch version from local release data %q is not latest version %q" $currentPatchVersion (index $row 0) -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
