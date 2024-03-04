@@ -35,14 +35,6 @@
   {{- end -}}
 {{- end -}}
 
-{{- if eq .Layout "glossary" -}}
-  {{- with resources.Get "js/glossary.js" -}}
-  <script defer src="{{ .RelPermalink }}"></script>
-  {{- else -}}
-    {{- errorf "Unable to find the glossary helper script" -}}
-  {{- end -}}
-{{- end -}}
-
 {{- if .HasShortcode "release-binaries" -}}
   {{- if hugo.IsProduction -}}
     {{- $releaseBinariesJs :=  resources.Get "js/release_binaries.js" | minify | fingerprint -}}
@@ -51,4 +43,24 @@
     {{- $releaseBinariesJs := resources.Get "js/release_binaries.js" -}}
 <script defer src="{{ $releaseBinariesJs.RelPermalink }}"></script>
   {{- end -}}
+{{- end -}}
+
+{{- if eq .Layout "glossary" -}}
+  {{- with resources.Get "js/glossary.js" -}}
+  <script defer src="{{ .RelPermalink }}"></script>
+  {{- else -}}
+    {{- errorf "Unable to find the glossary helper script" -}}
+  {{- end -}}
+  {{- with resources.Get "css/glossary.css" -}}
+    <link href="{{ .RelPermalink }}" rel="stylesheet">
+  {{- end -}}
+{{- end -}}
+
+{{- if eq (lower .Params.cid) "community" -}}
+<script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{{- end -}}
+
+{{- if eq .Layout "search" -}}
+  {{- $searchJs :=  resources.Get "js/search.js" | minify | fingerprint -}}
+<script src="{{ $searchJs.RelPermalink }}" integrity="{{ $searchJs.Data.Integrity }}" crossorigin="anonymous"></script>
 {{- end -}}
