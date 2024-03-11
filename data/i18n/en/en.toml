@@ -37,8 +37,14 @@ other = "ICP license:"
 [community_events_calendar]
 other = "Events Calendar"
 
+[community_calendar_name]
+other = "Calendar"
+
 [community_forum_name]
-other = "Forum"
+other = "Community Forum"
+
+[community_contributor_site_name]
+other = "Kubernetes contributors"
 
 [community_github_name]
 other = "GitHub"
