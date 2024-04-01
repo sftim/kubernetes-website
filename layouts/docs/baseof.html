@@ -22,6 +22,11 @@
             {{ partial "version-banner.html" . }}
             {{ if not .Site.Params.ui.breadcrumb_disable }}{{ partial "breadcrumb.html" . }}{{ end }}
             {{ block "main" . }}{{ end }}
+            {{- if .HasShortcode "thirdparty-content" -}}
+              {{ block "thirdparty-disclaimer" . }}
+                {{ partial "docs/thirdparty-disclaimer.html" . }}
+              {{- end -}}
+            {{- end -}}
             {{- if (.Param "auto_generated") -}}
               {{ block "auto-generated-pageinfo" . }}
                 {{ partial "docs/auto-generated-pageinfo.html" . }}
