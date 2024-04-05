@@ -969,6 +969,12 @@ body.glossary {
     }
 
   }
+
+  button.landscape-trigger {
+    background: $primary;
+    color: $white;
+    border: 0;
+  }
 }
 
 body.training, body.community {
@@ -1059,6 +1065,12 @@ body.partners {
         padding: 1.9em;
         border: 0.4em solid white;
         text-align: center;
+    }
+
+    // highlight on hover
+    .col-nav:has(button.landscape-trigger:hover) {
+      background-color: #efefef; // darker than #f9f9f9
+      color: $black;
     }
 
     @include media-breakpoint-down(sm) {
