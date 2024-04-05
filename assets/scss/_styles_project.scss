@@ -966,9 +966,16 @@ body.partners {
         display: table-cell; /* Make elements inside the container behave like table cells */
         width: 18%;
         background-color: #f9f9f9;
+        color: $black;
         padding: 1.9em;
         border: 0.4em solid white;
         text-align: center;
+    }
+
+    // highlight on hover
+    .col-nav:has(button.landscape-trigger:hover) {
+      background-color: #efefef; // darker than #f9f9f9
+      color: $black;
     }
 
     @include media-breakpoint-down(sm) {
@@ -1110,6 +1117,11 @@ body.partners {
     }
   }
 
+  button.landscape-trigger {
+    background: $primary;
+    color: $white;
+    border: 0;
+  }
 }
 
 body.training {
