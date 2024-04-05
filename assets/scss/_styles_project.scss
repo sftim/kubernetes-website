@@ -818,6 +818,15 @@ body.td-home {
   }
 }
 
+body.td-blog.td-section {
+  // When “read more” hovered in blog listing, underline article title
+  main h2 + ul {
+    .media-body:has(p > a:hover) h5 > a {
+      text-decoration: underline;
+    }
+  }
+}
+
 
 body.glossary {
   main {
