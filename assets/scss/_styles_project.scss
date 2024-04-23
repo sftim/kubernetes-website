@@ -37,6 +37,10 @@ nav {
         font-weight: bolder;
       }
     }
+
+    @include media-breakpoint-down(lg) {
+      display: none;
+    }
   }
 
   .nav-item {
@@ -486,6 +490,23 @@ body {
     input {
       padding: 0.2rem;
       padding-left: 0.5rem;
+    }
+  }
+  #td-sidebar-menu .search-bar {
+      margin-top: 0.5rem;
+      max-width: 100%;
+      @include media-breakpoint-down(sm) {
+         min-width: 80vw;
+         form > input {
+           width: 92.5%;
+         }
+      }
+  }
+  nav#td-section-nav {
+    @include media-breakpoint-down(sm) {
+      *:first-child {
+         margin-left: 2vw;
+      }
     }
   }
 }
