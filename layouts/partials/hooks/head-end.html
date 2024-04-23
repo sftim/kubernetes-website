@@ -58,8 +58,6 @@
 <script src="{{ $searchJs.RelPermalink }}" integrity="{{ $searchJs.Data.Integrity }}" crossorigin="anonymous"></script>
 {{- end -}}
 
-<link rel="manifest" href="/manifest.webmanifest">
-
 {{- if or (.HasShortcode "table")  (.HasShortcode "feature-gate-table") -}}
   {{- if hugo.IsProduction -}}
     {{- $sortableTableJs :=  resources.Get "js/sortable-table.js" | minify | fingerprint -}}
@@ -69,3 +67,23 @@
 <script defer src="{{ $sortableTableJs.RelPermalink }}"></script>
   {{- end -}}
 {{- end -}}
+
+{{- $announcementActive := false -}}
+{{- range $.Site.Data.announcements -}}
+  {{- range .announcements -}}
+    {{- if or (eq .startTime nil ) (lt ( time .startTime ) now ) -}}
+      {{- if or (eq .endTime nil ) (gt ( time .endTime ) now ) -}}
+        {{- if not $announcementActive -}}
+          {{- $announcementActive = true -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $announcementActive -}}
+  {{- with resources.Get "js/dismiss_banner.js" | minify -}}
+    <script defer src="{{ .RelPermalink }}"></script>
+  {{- end -}}
+{{- end -}}
+
+<link rel="manifest" href="/manifest.webmanifest">
