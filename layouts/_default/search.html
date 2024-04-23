@@ -8,7 +8,8 @@
     </form>
   </div>
   <div class="col-12 col-md-8 offset-md-2">
-  <script src="{{ "js/search.js" | relURL }}"></script>
+  {{- $googleSearchJs := resources.Get "js/search-google.js" -}}
+  <script src="{{ $googleSearchJs.RelPermalink }}"></script>
   <script src="/pagefind/pagefind-ui.js"></script>
   <gcse:searchresults-only linktarget="_parent">
     <div id="search" style="display:none"></div>

@@ -50,3 +50,8 @@
 {{- if eq (lower .Params.cid) "community" -}}
 <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {{- end -}}
+
+{{- if eq .Layout "search" -}}
+  {{- $searchJs :=  resources.Get "js/search.js" | minify | fingerprint -}}
+<script src="{{ $searchJs.RelPermalink }}" integrity="{{ $searchJs.Data.Integrity }}" crossorigin="anonymous"></script>
+{{- end -}}
