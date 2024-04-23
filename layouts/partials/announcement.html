@@ -15,8 +15,8 @@
     {{- if or (eq .endTime nil ) (gt ( time .endTime ) now ) -}}
       {{- if not $announcementShown -}}
       {{- $announcementShown = true -}}
-  <section class="js-td-cover td-overlay">
-    <div lang="en" id="announcement" class="announcement-hidden" data-announcement-name="{{ .name }}" style="background-color: #3371e3; color: #fff; {{ .style | safeCSS }}">
+  <section class="js-td-cover td-overlay" id="announcement" class="announcement-hidden" data-announcement-name="{{ .name }}" >
+    <div lang="en" style="background-color: #3371e3; color: #fff; {{ .style | safeCSS }}" class="announcement-container">
       <aside>
         <div class="announcement-main" data-nosnippet>
           {{ if .title }}

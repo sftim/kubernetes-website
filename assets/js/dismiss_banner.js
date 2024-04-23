@@ -1,4 +1,7 @@
 $(document).ready(function() {
+  if (console) {
+    console.log("Banner thing start");
+  }
   function setCookie(name, value, days) {
     let expires = "";
     let date = new Date(); // Create a new Date object
@@ -34,8 +37,14 @@ $(document).ready(function() {
   let button = document.querySelector('#banner-dismiss');
   button.removeAttribute('style');
   button.addEventListener('click', function() {
+    if (console) {
+      console.log("Banner hide click");
+    }
     setCookie(token, "true",
     button.getAttribute('data-ttl')); // Set a cookie with time to live parameter
     announcement.remove();
   });
+  if (console) {
+    console.log("Banner thing end");
+  }
 });

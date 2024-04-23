@@ -74,3 +74,21 @@
   {{- $searchJs :=  resources.Get "js/search.js" | minify | fingerprint -}}
 <script src="{{ $searchJs.RelPermalink }}" integrity="{{ $searchJs.Data.Integrity }}" crossorigin="anonymous"></script>
 {{- end -}}
+
+{{- $announcementActive := false -}}
+{{- range $.Site.Data.announcements -}}
+  {{- range .announcements -}}
+    {{- if or (eq .startTime nil ) (lt ( time .startTime ) now ) -}}
+      {{- if or (eq .endTime nil ) (gt ( time .endTime ) now ) -}}
+        {{- if not $announcementActive -}}
+          {{- $announcementActive = true -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $announcementActive -}}
+  {{- with resources.Get "js/dismiss_banner.js" | minify -}}
+    <script defer src="{{ .RelPermalink }}"></script>
+  {{- end -}}
+{{- end -}}
