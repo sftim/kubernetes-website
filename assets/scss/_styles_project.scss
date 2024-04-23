@@ -1,4 +1,7 @@
 /* Kubernetes custom styles */
+:root {
+  color-scheme: only light; // no dark mode support yet
+}
 
 nav {
   .navbar-logo + span {
@@ -518,6 +521,72 @@ body {
 }
 
 body.td-home {
+  #deprecation-warning {
+
+  }
+  #deprecation-warning, #deprecation-warning .deprecation-warning {
+    color: $white;
+    background: $primary;
+    a, a:visited {
+      text-decoration: underline;
+      color: $white;
+      background: $primary;
+    }
+  }
+
+  section.k8s-overview {
+    background: $primary;
+    color: $white;
+    p {
+      background: transparent;
+      color: inherit;
+
+      > a {
+        background: transparent;
+        color: inherit;
+        font-weight: bold;
+        text-decoration: underline;
+      }
+    }
+    h2, h3, h4, h5, h6 {
+      background: transparent;
+      color: inherit;
+    }
+  }
+
+  #video {
+    min-height: calc(max(40em, 250px));
+
+    .video-items {
+      width: 100%;
+      display: flex;
+      flex-basis: 100vw;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+
+      > * {
+        flex-basis: 50em;
+        flex-grow: 0;
+        flex-shrink: 5;
+        text-align: right;
+      }
+
+      #videoPlayer {
+        flex-basis: 100%;
+        flex-grow: 2;
+        flex-shrink: 0;
+      }
+    }
+    .light-text, .light-text a {
+     color: $white;
+    }
+    button {
+      background: $primary;
+      color: $white;
+      border: 0;
+    }
+  }
+
   .section-feature {
     min-height: 8em;
     .image-wrapper {
