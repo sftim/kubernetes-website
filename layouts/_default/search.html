@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="row td-search-result">
+<div class="col-12 col-md-8 offset-md-2">
+<h2 class="ml-4">{{ .Title }}</h2>
+  <!-- Google search and Bing search, together -->
+  <!-- Use Google search if viable -->
+  <gcse:searchresults-only linktarget="_parent">
+    <div id="bing-results-container">{{ T "layouts_docs_search_fetching" }}</div>
+    <div id="bing-pagination-container"></div>
+  </gcse:searchresults-only>
+</div>
+</section>
+{{ end }}
