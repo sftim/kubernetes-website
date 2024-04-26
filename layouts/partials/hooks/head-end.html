@@ -47,6 +47,15 @@
   {{- end -}}
 {{- end -}}
 
+{{ if .HasShortcode "mermaid" }}
+<!-- Copied from https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js -->
+  {{- with resources.Get "js/mermaid-10.6.1.min.js" -}}
+  <script src="{{ .RelPermalink }}" integrity="sha384-+NGfjU8KzpDLXRHduEqW+ZiJr2rIg+cidUVk7B51R5xK7cHwMKQfrdFwGdrq1Bcz"></script>
+  {{- else -}}
+    {{- errorf "No Mermaid helper script found" -}}
+  {{- end -}}
+{{ end }}
+
 {{- if eq (lower .Params.cid) "community" -}}
 <script defer src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 {{- end -}}
