@@ -83,9 +83,12 @@ div.feature-state-notice {
   border-width: 0 0 0 4px;
   border-radius: 0 0 2rem 0;
   h4 {
+    // All callout headings should be bold
     font-weight: bold;
     font-style: initial;
   }
+  min-height: 4rem;
+  background: rgba($primary, 0.045);
 }
 
 .glossary-tooltip {
