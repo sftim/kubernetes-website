@@ -290,21 +290,21 @@ section.call-to-action {
   padding: 0;
   display: grid;
 
-  max-width: 110em;
+  grid-template-columns: repeat(3, 1fr);
 
-  column-gap: calc(max(2.5rem, 1rem + 1.1vw));
-  row-gap: calc(max(2.5rem, 1rem + 1.1vw));
+  row-gap: 1.5rem;
 
   .launch-card {
     display: flex;
-    border-radius: 0.75rem;
-    padding: 0.75rem 0.75em 0.75rem calc(max(0.75rem, 2.5rem - 1vw));
+    padding: 0 2rem 0 0;
 
     .card-content{
-      width: 100%;
+      width: fit-content;
       display: flex;
       flex-direction: column;
       margin: 0;
+
+      row-gap: 1em;
 
       h2 {
         font-size: 1.5em;
@@ -324,21 +324,19 @@ section.call-to-action {
         height: fit-content;
         line-height: 1.6;
         padding: 0;
-        padding-top: 0.5rem;
-        padding-left: 2em;
+        margin-block-end: auto;
 
         > li:last-child {
           margin-bottom: 1rem;
         }
-        flex-grow: 2;
       }
 
       button {
-        min-width: 55%;
+        min-width: 75%;
         align-self: center;
-        background-color: $white;
-        color: $primary;
-        border: 1.5px solid $primary;
+        background: $primary;
+        color: $white;
+        border: 0;
         font-weight: bold;
         border-radius: 0.5rem;
         height: min-content;
@@ -348,37 +346,6 @@ section.call-to-action {
         box-sizing: border-box;
       }
     }
-  }
-  .launch-card:has(button) {
-    background: rgba(210, 210, 210, 0.2);
-    color: $black;
-  }
-
-  .launch-card:has(button:hover) {
-    background: rgba(210, 210, 210, 0.4);
-    button, button:hover {
-      background: $primary;
-      color: $white;
-    }
-  }
-
-  @media (min-width: 60rem) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include media-breakpoint-up(xl) {
-    margin-left: auto;
-    margin-right: auto;
-    .launch-card {
-      max-width: calc(min(80vw, 40em));
-      padding: 0.75rem;
-      > .card-content button {
-        align-self: flex-end;
-      }
-    }
-  }
-  @media (min-width: 120rem) {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 
