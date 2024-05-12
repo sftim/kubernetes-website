@@ -132,10 +132,6 @@ copyright_linux = "Copyright © 2020 The Linux Foundation ®."
 # First one is picked as the Twitter card image if not set on page.
 # images = ["images/project-illustration.png"]
 
-# Menu title if your navbar has a versions selector to access old versions of your site.
-# This menu appears only if you have at least one [params.versions] set.
-version_menu = "Versions"
-
 time_format_blog = "Monday, January 02, 2006"
 time_format_default = "January 02, 2006 at 3:04 PM PST"
 
@@ -194,24 +190,32 @@ version = "v1.29"
 githubbranch = "v1.29.3"
 docsbranch = "release-1.29"
 url = "https://v1-29.docs.kubernetes.io"
+archived_version = true
+url_latest_version = "https://kubernetes.io/"
 
 [[params.versions]]
 version = "v1.28"
 githubbranch = "v1.28.8"
 docsbranch = "release-1.28"
 url = "https://v1-28.docs.kubernetes.io"
+archived_version = true
+url_latest_version = "https://kubernetes.io/"
 
 [[params.versions]]
 version = "v1.27"
 githubbranch = "v1.27.12"
 docsbranch = "release-1.27"
 url = "https://v1-27.docs.kubernetes.io"
+archived_version = true
+url_latest_version = "https://kubernetes.io/"
 
 [[params.versions]]
 version = "v1.26"
 githubbranch = "v1.26.15"
 docsbranch = "release-1.26"
 url = "https://v1-26.docs.kubernetes.io"
+archived_version = true
+url_latest_version = "https://kubernetes.io/"
 
 # User interface configuration
 [params.ui]
