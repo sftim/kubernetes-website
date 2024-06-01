@@ -1,3 +1,26 @@
+{{- $isBirthday := false -}}
+{{- with site.GetPage "page" "community/special/kubernetes-10th-birthday" -}}
+  {{ if eq ( (.Param "display_date") | time.AsTime | time.Format "2006-01-02" ) ( time.Now | time.Format "2006-01-02" ) }}
+    {{- $isBirthday = true -}}
+    {{- warnf "%s" "It's Kubernetes' birthday, fingers crossed this renders OK" -}}
+    {{- with resources.Get "images/k8s-10th-birthday.svg" -}}
+    {{- else -}}
+      {{- warnf "%s" "10th Birthday image missing" -}}
+    {{- end -}}
+  {{ end }}
+{{- end -}}
+{{- if $isBirthday -}}
+<section id="{{ .id }}" class="k8s-birthday-override">
+  {{- with site.GetPage "page" "community/special/kubernetes-10th-birthday" -}}
+  <img src="{{ with resources.Get "images/k8s-10th-birthday.svg" }}{{ .RelPermalink }}{{ end }}" class="birthday-banner" title="{{ .Content | markdownify }}" alt=".Content" ></img>
+  {{- else -}}
+    {{- errorf "%s" "10th Birthday text missing" -}}
+  {{- end -}}
+  <div class="k8s-birthday-override revert-to-previous">
+      <form><label for="skip-birthday-details">{{ T "k8s_birthday_show_original_content" }}</label><input type=checkbox id="skip-birthday-details"></form>
+  </div>
+</section>
+{{- end -}}
 <section id="{{ .id }}"{{ with .class }} class="{{ . }}"{{ end }}>
   {{ .inner }}
 </section>
