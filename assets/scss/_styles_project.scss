@@ -1,5 +1,9 @@
 /* This file is provided by Docsy as an extension point for styling.
 Add styles or import other files. */
 
+:root {
+  color-scheme: only light; // no dark mode support yet
+}
+
 //Site wide customization
 @import "custom";
