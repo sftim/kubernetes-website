@@ -11,7 +11,7 @@
  {{- partial "kubernetes-overview.html" (dict "id" $id "class" $class "inner" $.Inner ) -}}
 {{- else -}}
 <a id="{{ $id_fallback }}" class="td-offset-anchor"></a>
-<section id="{{ $id }}" class="row td-box td-box--{{ $col_id }} td-box--gradient td-box--height-{{ $height }}{{ with $class }} {{ . }}{{ end }}" style="{{ if isset .Params "background-image"  }}background-image: url({{ printf "/images/%s.jpg" (.Get "background-image") }}); {{ end }}{{ with $style }}{{ . | safeCSS }}{{ end }}">
+<section id="{{ $id }}" class="row td-box td-box--{{ $col_id }} td-box--gradient td-box--height-{{ $height }}{{ if isset .Params "class" }} {{ $class }}{{ end }}" style="{{ if isset .Params "background-image"  }}background-image: url({{ printf "/images/%s.jpg" (.Get "background-image") }}); {{ end }}{{ with $style }}{{ . | safeCSS }}{{ end }}">
 	<div class="col">
 		<div class="row {{ $type }}">
 			{{ if eq .Page.File.Ext "md" }}
