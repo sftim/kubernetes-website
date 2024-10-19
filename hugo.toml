@@ -148,7 +148,7 @@ latest = "v1.31"
 version = "v1.31"
 githubbranch = "main"
 docsbranch = "main"
-deprecated = false
+deprecated = true
 currentUrl = "https://kubernetes.io/docs/home/"
 nextUrl = "https://kubernetes-io-vnext-staging.netlify.com/"
 
