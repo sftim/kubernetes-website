@@ -18,13 +18,6 @@
 <meta name="theme-color" content="#326ce5">
 
 {{- if or (.HasShortcode "table")  (.HasShortcode "feature-gate-table") -}}
-  {{- if hugo.IsProduction -}}
-    {{- $sortableTableJs :=  resources.Get "js/sortable-table.js" | minify | fingerprint -}}
-<script defer src="{{ $sortableTableJs.RelPermalink }}" integrity="{{ $sortableTableJs.Data.Integrity }}" crossorigin="anonymous"></script>
-  {{- else -}}
-    {{- $sortableTableJs := resources.Get "js/sortable-table.js" -}}
-<script defer src="{{ $sortableTableJs.RelPermalink }}"></script>
-  {{- end -}}
 {{- end -}}
 
 {{- if .HasShortcode "cncf-landscape" -}}
@@ -59,6 +52,29 @@
   {{- else -}}
     {{- $releaseBinariesJs := resources.Get "js/release_binaries.js" -}}
 <script defer src="{{ $releaseBinariesJs.RelPermalink }}"></script>
+  {{- end -}}
+{{- end -}}
+
+{{/* JavaScript for dismissable announcements */}}
+{{- $bannerDismissible := false -}}
+{{- range $.Site.Data.announcements -}}
+  {{- range .announcements -}}
+    {{- if or (eq .startTime nil ) (lt ( time .startTime ) now ) -}}
+      {{- if or (eq .endTime nil ) (gt ( time .endTime ) now ) -}}
+        {{- with .dismissParameters -}}
+          {{- $bannerDismissible = (or $bannerDismissible (index . "dismissible")) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if $bannerDismissible -}}
+  {{- if hugo.IsProduction -}}
+    {{- $bannerDismissJs :=  resources.Get "js/banner-dismiss.js" | minify | fingerprint -}}
+    <script defer src="{{ $bannerDismissJs.RelPermalink }}" integrity="{{ $bannerDismissJs.Data.Integrity }}" crossorigin="anonymous"></script>
+  {{- else -}}
+    {{- $bannerDismissJs := resources.Get "js/banner-dismiss.js" -}}
+    <script defer src="{{ $bannerDismissJs.RelPermalink }}"></script>
   {{- end -}}
 {{- end -}}
 
@@ -102,3 +118,4 @@
 <meta property="og:image" content="{{ "/images/kubernetes-horizontal-color.png" | relURL }}">
 <meta property="og:type" content="website">
 {{ end }}
+
