@@ -76,6 +76,32 @@ nav {
          margin-right: calc(max(1em, 2.5vw));
       }
     }
+
+    button {
+      border-radius: 0.5rem;
+      padding: .5em 1em;
+      border: 0;
+      font-weight: bold;
+      height: min-content;
+
+      cursor: pointer;
+      box-sizing: border-box;
+
+      &#banner-dismiss {
+
+        float: right;
+        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
+
+        background: $white;
+        color: $primary;
+
+        &:hover {
+          background: $white;
+          color: $secondary;
+        }
+      }
+    }
   }
 
   @include media-breakpoint-up(md) {
@@ -86,16 +112,24 @@ nav {
   }
 }
 
-html.no-js body div#announcement {
-  display: none; // Don't show announcements when javascript is not available
+// Fallback in case there is no JavaScript
+html body div#announcement {
+  #announcement.display-announcement{
+    display: initial; // apply this class to display the announcement
+  }
 }
 
-#announcement {
-  display: none; // When javascript is available, Let javascript handle the state of the announcement
+// When javascript is available, let javascript handle the state of the announcement
+html.no-js body div#announcement.bannerannouncement-dismissable {
+  display: none; // Initially hide announcements when javascript is available
+                 // and the banner supports being dismissed
+                 // The Javascript code will reveal them
 }
 
-#announcement.display-announcement{
-  display: block; // apply this class to display the announcement
+html:not(.no-js) body div#announcement {
+  .banner-dismiss {
+     display: initial;
+  }
 }
 
 // Adjust spacing when announcement shown
