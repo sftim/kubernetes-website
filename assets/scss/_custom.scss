@@ -5,6 +5,25 @@
 
 // For documentation styles, see _documentation.scss
 
+/* use simple logo on narrow viewports */
+/* use full logo on really narrow viewports */
+#logo-text-kubernetes {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+@include media-breakpoint-between(md, lg) {
+  #logo-text-kubernetes {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+}
+@media (max-width: 800px) {
+  #logo-text-kubernetes {
+    transition: opacity 0s;
+  }
+}
+
+
 nav {
   .navbar-logo + span {
     visibility: hidden;
