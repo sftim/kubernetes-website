@@ -288,9 +288,8 @@ Code examples and configuration examples that include version information should
 be consistent with the accompanying text.
 
 If the information is version specific, the Kubernetes version needs to be defined
-in the `prerequisites` section of the [Task template](/docs/contribute/style/page-content-types/#task)
-or the [Tutorial template](/docs/contribute/style/page-content-types/#tutorial).
-Once the page is saved, the `prerequisites` section is shown as **Before you begin**.
+in the `prerequisites` section of page.
+See [page content types](/docs/contribute/style/page-content-types/).
 
 To specify the Kubernetes version for a task or tutorial page, include
 `min-kubernetes-server-version` in the front matter of the page.
@@ -309,7 +308,11 @@ min-kubernetes-server-version: v1.8
 ---
 ```
 
-In code and configuration examples, do not include comments about alternative versions.
+and then add two shortcodes into the prerequisites section:
+`{{</* include "task-tutorial-prereqs.md" */>}}` and `{{</* version check */>}}`.
+
+In code and configuration examples, watch out for comments about alternative versions that
+could mislead readers.
 Be careful to not include incorrect statements in your examples as comments, such as:
 
 ```yaml
@@ -317,6 +320,9 @@ apiVersion: v1 # earlier versions use...
 kind: Pod
 ...
 ```
+
+Kubernetes documentation aims to be timeless; statements that are correct for the current
+release may become incorrect once the next minor release happens.
 
 ## Formulae and equations
 
