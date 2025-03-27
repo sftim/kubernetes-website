@@ -205,12 +205,18 @@ details:not([open]) > summary:after {
 
 /* Customize docs landing page display */
 body.docs-portal {
+  .td-content > h1:first-child {
+    text-align: center;
+    color: $primary;
+    padding-top: 0;
+  }
   main .td-content {
     .launch-content {
       display: flex;
+      justify-content: flex-start;
       flex-flow: column nowrap;
-      align-items: center;
-      row-gap: 5rem;
+      align-items: stretch;
+      row-gap: 1.5rem;
     }
     .launch-content > p:first-child {
       margin-left: auto;
@@ -219,8 +225,47 @@ body.docs-portal {
       order: 1;
     }
   }
+  @include media-breakpoint-down(md) {
+    main .td-content {
+      .launch-content .launch-cards {
+        grid-template-columns: repeat(2, 1fr);
+
+        .card-content {
+          width: initial;
+        }
+      }
+    }
+  }
+  @include media-breakpoint-down(sm) {
+    main .td-content {
+      .launch-content .launch-cards {
+        grid-template-columns: 1fr;
+        .card-content {
+          min-width: calc(max(75vw, 30rem));
+          padding-left: 2rem;
+        }
+      }
+    }
+  }
+  @include media-breakpoint-down(xs) {
+    main .td-content {
+      .launch-content .launch-cards {
+        .card-content {
+          min-width: 80vw;
+        }
+      }
+    }
+  }
   nav.td-breadcrumbs {
-    visibility: hidden; // not needed
+    visibility: hidden;
+  }
+  nav.td-breadcrumbs {
+    visibility: collapse;
+  }
+  @include media-breakpoint-down(md) {
+    nav.td-breadcrumbs {
+      display: none; // really hide it!
+    }
   }
 }
 
