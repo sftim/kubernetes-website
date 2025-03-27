@@ -993,6 +993,12 @@ body.td-home {
       color: $white;
       border: 0;
     }
+
+    #desktopShowVideoButton {
+      padding: 0.5em;
+      border-radius: 0.1em;
+      margin-bottom: 0.5em;
+    }
   }
 
   // Special styles for Kubernetes' 10th birthday
